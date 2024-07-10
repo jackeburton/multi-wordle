@@ -1,19 +1,11 @@
-export type GameState = [
-    Guess | null,
-    Guess | null,
-    Guess | null,
-    Guess | null,
-    Guess | null,
-]
+export type GameState = (Guess | null)[]
 
 export type Guess = [Char, Char, Char, Char, Char]
 
 export const ALL_CHARS = ['A' , 'B' , 'C' , 'D' , 'E' , 'F' , 'G' , 'H' , 'I' , 'J' , 'K' 
 , 'L' , 'M' , 'N' , 'O' , 'P' , 'Q' , 'R' , 'S' , 'T' , 'U' , 'V' , 'W' , 'X', 'Y', 'Z', ''] as const
 
-export type CharTuple = typeof ALL_CHARS
-
-export type Char = CharTuple[number]
+export type Char = string
 
 export const BACKSPACE_CHAR = ['Backspace']
 
