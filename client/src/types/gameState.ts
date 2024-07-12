@@ -18,3 +18,9 @@ export const ENTER_CHAR = ['Enter']
 export type EnterCharTuple = typeof ENTER_CHAR
 
 export type EnterChar = EnterCharTuple[number]
+
+export type GuessedLetter = {[letter: string] : string}
+
+export const CORRECT_LOCATION_COLOUR = 'bg-green-500'
+export const CORRECT_COLOUR = 'bg-yellow-500'
+export const INCORRECT_COLOUR = 'bg-gray-1000'
