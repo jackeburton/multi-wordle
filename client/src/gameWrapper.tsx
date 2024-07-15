@@ -3,11 +3,12 @@ import Game from "./game";
 import io from 'socket.io-client'
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { Game1v1, Games } from '../../types/shared';
 
 const socket = io('http://localhost:3000')
 
 type ConnectionInfo = {
-    data: {}
+    data: {} | Game1v1
     message: string
 }
 
@@ -47,20 +48,41 @@ function GameWrapper() {
           };
     }, [])
 
+    const checkGame = () => {
+        socket.emit('checkGame', connectionInfo.data)
+    }
+
+    useEffect(() => {
+        socket.on('gameUpdate', (gameUpdateInfo) => {
+            setConnectionInfo(prevState => (
+                {...prevState, 
+                data: {...prevState.data,
+                    gameState: gameUpdateInfo
+                }
+                }))
+        })
+    })
+
     console.log(connectionInfo)
 
-    if (connectionInfo?.message === 'game is full') {
+    if (connectionInfo?.message === 'game is full' || connectionInfo?.message === 'game not found') {
         return (
         <div>
             {JSON.stringify(connectionInfo)}
         </div>)
     }
 
-    if (isValidGameId) {
+    const playerFinish = (info) => {
+        console.log(JSON.stringify(info))
+        socket.emit('playerWin', {connectionInfo: connectionInfo,  userId: userId, info: info})
+    }
+
+    if (isValidGameId && connectionInfo) {
         return (
             <div>
                 {JSON.stringify(connectionInfo)}
-            <Game/>
+                <button onClick={checkGame}>check game</button>
+                <Game gameInfo={connectionInfo.data} winCallback={playerFinish}/>
             </div>
         )
     }

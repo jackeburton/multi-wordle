@@ -2,23 +2,43 @@ import { useEffect, useState } from "react"
 import { ALL_CHARS, BACKSPACE_CHAR, Char, CORRECT_COLOUR, CORRECT_LOCATION_COLOUR, ENTER_CHAR, GameState, Guess, GuessedLetter, INCORRECT_COLOUR } from "./types/gameState"
 import { ALL_WORDS } from "./types/validWordsList"
 import Keyboard from "./keyboard"
+import { Game1v1 } from '../../types/shared';
 
-const answer_ref = ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)]
+//const answer_ref = ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)]
 
-let answer_pregen : string[] = []
+/*const genAnswer = (answer_pregen: string[]) => {
+    const answer_array = []
+    console.log(answer_pregen)
+    for (const char of answer_pregen)
+    return answer_array
+}*/
 
-for (const char of answer_ref) {
-    answer_pregen.push(char)
+type GameProps = {
+    gameInfo: Game1v1,
+    winCallback: (info) => void
 }
 
-function Game() {
-    const [answer, setAnswer] = useState(answer_pregen)
+function Game({gameInfo, winCallback} : GameProps) {
+    const [answer, setAnswer] = useState(gameInfo.word)
     const [gameState, setGameState] = useState<GameState>([null, null, null, null, null])
     const [currentGuess, setCurrentGuess] = useState<Guess>(['', '', '', '', ''])
     const [boxStyle, setBoxStyle] = useState('h-16 w-16 border-solid border-2 border-gray-600 text-white m-1 align-middle inline-flex items-center justify-center text-2xl')
     const [hasWon, setHasWon] = useState<null|boolean>(null)
     const [guessedLetters, setGuessedLetters] = useState<GuessedLetter>({A : '', B : '' , C : '' , D : '' , E : '' , F : '' , G : '' , H : '' , I : '' , J : '' , K : '' 
 , L : '' , M : '' , N : '' , O : '' , P : '' , Q : '' , R : '' , S : '' , T : '' , U : '' , V : '' , W : '' , X : '', Y : '', Z : ''})
+
+    useEffect(() => {
+        console.log('has won changed')
+        console.log(hasWon)
+        if (hasWon !== null){
+            const callbackObj = {
+                hasWon: hasWon,
+                guesses: gameState.filter(guess => guess !== null).length
+            }
+            console.log('inside game obj ' + JSON.stringify(callbackObj))
+            winCallback(callbackObj)
+        }
+    }, [hasWon])
 
     useEffect(() => {
         const gameStateNoNulls = gameState.filter(guess => guess !== null)
