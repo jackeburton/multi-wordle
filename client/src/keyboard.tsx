@@ -20,7 +20,6 @@ function Keyboard({guessedLetters} : KeyboardProps) {
                     <div className="inline-block">
                     {row.map((letter, index) => {
                         let keyBG = defaultClass
-                        console.log(guessedLetters[letter])
                         if (guessedLetters[letter] !== '') {
                             keyBG = keyBG + ' ' + guessedLetters[letter]
                         } else {
