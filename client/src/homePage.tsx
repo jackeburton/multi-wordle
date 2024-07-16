@@ -13,7 +13,7 @@ function HomePage() {
 
   if (localStorage.getItem("storedData") === null){
     localStorage.setItem("storedData", JSON.stringify(uuidv4()));
-    }
+  }
 
     const [userId, setUserId] = useState(localStorage.getItem("storedData"))
 

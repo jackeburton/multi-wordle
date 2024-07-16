@@ -30,6 +30,7 @@ function GameWrapper() {
 
     useEffect(() => {
         socket.on('validateGameId', (isValid: boolean) => {
+            console.log('si valid game' + isValid)
             setIsValidGameId(isValid)
         })
 
@@ -40,6 +41,7 @@ function GameWrapper() {
 
     useEffect(() => {
         socket.on('connectToGame', (connectionInfo) => {
+            console.log('connection info' + connectionInfo)
             setConnectionInfo(connectionInfo)
         })
 
@@ -53,7 +55,7 @@ function GameWrapper() {
     }
 
     useEffect(() => {
-        socket.on('gameUpdate', (gameUpdateInfo) => {
+        socket.on('playerWin', (gameUpdateInfo) => {
             setConnectionInfo(prevState => (
                 {...prevState, 
                 data: {...prevState.data,
@@ -80,8 +82,8 @@ function GameWrapper() {
     if (isValidGameId && connectionInfo) {
         return (
             <div>
-                {JSON.stringify(connectionInfo)}
-                <button onClick={checkGame}>check game</button>
+                {JSON.stringify(connectionInfo.data.gameState)}
+                {/*<button onClick={checkGame}>check game</button>*/}
                 <Game gameInfo={connectionInfo.data} winCallback={playerFinish}/>
             </div>
         )

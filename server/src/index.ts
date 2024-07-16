@@ -40,6 +40,7 @@ io.on('connection', (socket) => {
     socket.on('createGame', (userId) => {
         console.log('received create game request')
         const newGameid = getNewGameId()
+        socket.join(newGameid);
         const game:Game1v1 = {id: newGameid, user1Id: userId, user2Id: null, word: getNewWord(), gameState: 'in play'} 
         games.push(game)
         console.log(games)
@@ -63,16 +64,20 @@ io.on('connection', (socket) => {
         const winningUserId = winInfo.userId
         console.log(games)
         console.log(wonGameinfo)
+        let gameInfo
         games.some((game, index) => {
             if (game.id === wonGameinfo.id) {
                 if (game.user1Id === winningUserId){
                     games[index].gameState = 'user 1 win'
+                    gameInfo = games[index].gameState
                 } else if(game.user2Id === winningUserId){
                     games[index].gameState = 'user 2 win'
+                    gameInfo = games[index].gameState
                 }
             }
         })
         console.log(games)
+        io.to(wonGameinfo.id).emit('playerWin', gameInfo)
     })
 
     socket.on('checkGame', (ConnectionInfo) => {
@@ -89,28 +94,28 @@ io.on('connection', (socket) => {
     socket.on('connectToGame', (userConnectRequest: userConnectRequest) => {
         let connectionInfo = ''
         let gameToFind = {}
+
         games.some((game, index) => {
             if (game.id === userConnectRequest.id) {
                 console.log('found game')
                 if (game.user1Id === userConnectRequest.userId){
                     connectionInfo = 'you are player 1'
+                    socket.join(game.id);
                     gameToFind = games[index]
                 } else if (game.user2Id === userConnectRequest.userId){
                     connectionInfo = 'you are player 2'
+                    socket.join(game.id);
                     gameToFind = games[index]
-                } else if (game.user1Id !== null && game.user2Id !== null){
-                    console.log(typeof game.user2Id)
-                    connectionInfo = 'game is full'
-                    gameToFind = games[index]
-                } else {
+                } else if (game.user2Id === null){
                     connectionInfo = 'joined as player 2'
                     games[index].user2Id = userConnectRequest.userId;
+                    socket.join(game.id);
                     gameToFind = games[index]
-                }
+                } 
             }
         });
         if (Object.keys(gameToFind).length !== 0){
-
+            console.log('emitting to ' + userConnectRequest.id)
             socket.emit('connectToGame', {data: gameToFind , message: connectionInfo})
         } else {
             socket.emit('connectToGame', {data: {} , message: 'game not found'})
