@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { ALL_CHARS, BACKSPACE_CHAR, Char, CORRECT_COLOUR, CORRECT_LOCATION_COLOUR, ENTER_CHAR, GameState, Guess, GuessedLetter, INCORRECT_COLOUR } from "./types/gameState"
 import { ALL_WORDS } from "./types/validWordsList"
 import Keyboard from "./keyboard"
-import { Game1v1 } from '../../types/shared';
+import { Game1v1 } from "./types/gameState"
 
 //const answer_ref = ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)]
 

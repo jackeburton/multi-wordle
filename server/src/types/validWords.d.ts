@@ -1,4 +1,4 @@
-import { ALL_WORDS } from "./validWordsList"
+import { ALL_WORDS } from "../server/src/types/validWordsList"
 
 export type WordTuple = typeof ALL_WORDS
 

@@ -1,12 +1,14 @@
 import express from 'express';
+import cors from 'cors';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io'
 import { v4 as uuidv4 } from 'uuid';
 import { userConnectRequest } from './types/connection';
-import { Game1v1, Games } from '../../types/shared';
-import { ALL_WORDS } from "../../types/validWordsList"
+import { Game1v1, Games } from './types/gameState';
+import { ALL_WORDS } from "./types/validWordsList"
 
 const app = express();
+app.use(cors());
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
@@ -65,7 +67,7 @@ io.on('connection', (socket) => {
         console.log(games)
         console.log(wonGameinfo)
         let gameInfo
-        games.some((game, index) => {
+        games.some((game:Game1v1, index:number) => {
             if (game.id === wonGameinfo.id) {
                 if (game.user1Id === winningUserId){
                     games[index].gameState = 'user 1 win'
@@ -83,7 +85,7 @@ io.on('connection', (socket) => {
     socket.on('checkGame', (ConnectionInfo) => {
         console.log(ConnectionInfo)
         let update = ''
-        games.some((game, index) => {
+        games.some((game:Game1v1) => {
             if (game.id === ConnectionInfo.id) {
                 update = game.gameState
             }
@@ -95,7 +97,7 @@ io.on('connection', (socket) => {
         let connectionInfo = ''
         let gameToFind = {}
 
-        games.some((game, index) => {
+        games.some((game:Game1v1, index:number) => {
             if (game.id === userConnectRequest.id) {
                 console.log('found game')
                 if (game.user1Id === userConnectRequest.userId){

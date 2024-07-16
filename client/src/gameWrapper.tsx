@@ -51,7 +51,7 @@ function GameWrapper() {
     }, [])
 
     const checkGame = () => {
-        socket.emit('checkGame', connectionInfo.data)
+        socket.emit('checkGame', connectionInfo?.data)
     }
 
     useEffect(() => {
