@@ -25,12 +25,14 @@ export const CORRECT_LOCATION_COLOUR = 'bg-green-500'
 export const CORRECT_COLOUR = 'bg-yellow-500'
 export const INCORRECT_COLOUR = 'bg-gray-1000'
 
+export type GameResult = 'user 1 win' | 'user 2 win' | 'draw' | 'in play'
+
 export type Game1v1 = {
     id: string,
     user1Id: string | null,
     user2Id: string | null
     word: string[]
-    gameState: 'user 1 win' | 'user 2 win' | 'draw' | 'in play'
+    gameState: GameResult
 }
 
 

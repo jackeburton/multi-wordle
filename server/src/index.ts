@@ -59,14 +59,13 @@ io.on('connection', (socket) => {
         }
         socket.emit('validateGameId', gameFound);
     })
-
     socket.on('playerWin', (winInfo) => {
         console.log(winInfo)
         const wonGameinfo = winInfo.connectionInfo.data
         const winningUserId = winInfo.userId
         console.log(games)
         console.log(wonGameinfo)
-        let gameInfo
+        let gameInfo: string = ''
         games.some((game:Game1v1, index:number) => {
             if (game.id === wonGameinfo.id) {
                 if (game.user1Id === winningUserId){
@@ -80,17 +79,6 @@ io.on('connection', (socket) => {
         })
         console.log(games)
         io.to(wonGameinfo.id).emit('playerWin', gameInfo)
-    })
-
-    socket.on('checkGame', (ConnectionInfo) => {
-        console.log(ConnectionInfo)
-        let update = ''
-        games.some((game:Game1v1) => {
-            if (game.id === ConnectionInfo.id) {
-                update = game.gameState
-            }
-        })
-        socket.emit('gameUpdate', update)
     })
 
     socket.on('connectToGame', (userConnectRequest: userConnectRequest) => {
@@ -116,11 +104,14 @@ io.on('connection', (socket) => {
                 } 
             }
         });
-        if (Object.keys(gameToFind).length !== 0){
-            console.log('emitting to ' + userConnectRequest.id)
-            socket.emit('connectToGame', {data: gameToFind , message: connectionInfo})
-        } else {
-            socket.emit('connectToGame', {data: {} , message: 'game not found'})
+        if (Object.keys(gameToFind).length !== 0) {
+            console.log('emitting to ' + userConnectRequest.id);
+            //socket.emit('connectToGame', { data: gameToFind, message: connectionInfo });
+            socket.emit('connectToGame', { gameFound: true, message: connectionInfo });
+        }
+        else {
+            //socket.emit('connectToGame', { data: {}, message: 'game not found' });
+            socket.emit('connectToGame', false);
         }
     })
 
