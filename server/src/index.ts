@@ -126,6 +126,6 @@ io.on('connection', (socket) => {
       });
 })
 
-server.listen(3000, () => {
+server.listen(3000, '0.0.0.0', () => {
   console.log('server running at http://localhost:3000');
 });
