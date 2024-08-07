@@ -2,24 +2,15 @@ import { useEffect, useState } from "react"
 import { ALL_CHARS, BACKSPACE_CHAR, Char, CORRECT_COLOUR, CORRECT_LOCATION_COLOUR, ENTER_CHAR, GameState, Guess, GuessedLetter, INCORRECT_COLOUR } from "./types/gameState"
 import { ALL_WORDS } from "./types/validWordsList"
 import Keyboard from "./keyboard"
-import { Game1v1 } from "./types/gameState"
-
-//const answer_ref = ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)]
-
-/*const genAnswer = (answer_pregen: string[]) => {
-    const answer_array = []
-    console.log(answer_pregen)
-    for (const char of answer_pregen)
-    return answer_array
-}*/
+import { Game1v1, WinInfo } from "./types/gameState"
 
 type GameProps = {
     gameInfo: Game1v1,
-    winCallback: (info) => void
+    winCallback: (info: WinInfo) => void
 }
 
 function Game({gameInfo, winCallback} : GameProps) {
-    const [answer, setAnswer] = useState(gameInfo.word)
+    const answer = gameInfo.word
     const [gameState, setGameState] = useState<GameState>([null, null, null, null, null])
     const [currentGuess, setCurrentGuess] = useState<Guess>(['', '', '', '', ''])
     const [boxStyle, setBoxStyle] = useState('h-16 w-16 border-solid border-2 border-gray-600 text-white m-1 align-middle inline-flex items-center justify-center text-2xl')
@@ -33,7 +24,7 @@ function Game({gameInfo, winCallback} : GameProps) {
         if (hasWon !== null){
             const callbackObj = {
                 hasWon: hasWon,
-                guesses: gameState.filter(guess => guess !== null).length
+                numOfGuesses: gameState.filter(guess => guess !== null).length
             }
             console.log('inside game obj ' + JSON.stringify(callbackObj))
             winCallback(callbackObj)

@@ -3,7 +3,7 @@ import Game from "./game";
 import io from 'socket.io-client'
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Game1v1, GameResult } from './types/gameState'
+import { Game1v1, GameResult, WinInfo } from './types/gameState'
 
 const socket = io('http://localhost:3000')
 
@@ -12,17 +12,12 @@ type ConnectionInfo = {
     message: string
 }
 
-type WinInfo = {
-    hasWon: boolean,
-    guesses: number
-}
-
 function GameWrapper() {
     if (localStorage.getItem("storedData") === null){
         localStorage.setItem("storedData", JSON.stringify(uuidv4()));
     }
 
-    const [userId, setUserId] = useState(localStorage.getItem("storedData"))
+    const userId = localStorage.getItem("storedData")
     const [isValidGameId, setIsValidGameId] = useState<null|boolean>(true)
     const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo | null>(null)
     const [game, setGame] = useState<Game1v1 | null>(null)
@@ -47,10 +42,13 @@ function GameWrapper() {
 
     useEffect(() => {
         socket.on('connectToGame', (connectionInfo: false | ConnectionInfo) => {
-            console.log('connection info' + connectionInfo)
+            console.log('connection info:')
+            console.log(connectionInfo)
             if (connectionInfo){
                 setConnectionInfo(connectionInfo)
                 if (connectionInfo.data){
+                    console.log('connection info data')
+                    console.log(connectionInfo.data)
                     setGame(connectionInfo.data)
                 }
             } else {
@@ -94,11 +92,16 @@ function GameWrapper() {
         socket.emit('playerWin', {connectionInfo: connectionInfo,  userId: userId, info: winInfo})
     }
 
+    console.log('GAME VARS ///')
+    console.log(isValidGameId)
+    console.log(connectionInfo)
+    console.log(game)
+    console.log('/// GAME VARS') 
     if (isValidGameId && connectionInfo && game) {
         return (
             <div>
-                {JSON.stringify(game.gameState)}
-                {/*<button onClick={checkGame}>check game</button>*/}
+                <div>{game.gameState}</div>
+                <div>{connectionInfo.message}</div>
                 <Game gameInfo={game} winCallback={playerFinish}/>
             </div>
         )

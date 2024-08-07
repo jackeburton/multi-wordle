@@ -37,3 +37,8 @@ export type Game1v1 = {
 
 
 export type Games = Game1v1[]
+
+export type WinInfo = {
+    hasWon: boolean,
+    numOfGuesses: number
+}
