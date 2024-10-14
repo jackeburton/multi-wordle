@@ -1,6 +1,6 @@
 # multi-wordle
 
-A front end / back end react/nodeJS implementation of wordle, where two players compete to see who can find a word quickest
+A frontend / backend react/nodeJS implementation of wordle, where two players compete to see who can find a word quickest
 
 Technologies:
 
