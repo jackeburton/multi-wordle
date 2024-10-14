@@ -4,13 +4,13 @@ A frontend / backend react/nodeJS implementation of wordle, where two players co
 
 Technologies:
 
-Typescript
-React
-NodeJS
-Websockets
-React query
-Vite
-TailwindCSS
+- Typescript
+- React
+- NodeJS
+- Websockets
+- React query
+- Vite
+- TailwindCSS
 
 Motivated by trying to prove between myself and colleagues / friends who is better at wordle!
 
